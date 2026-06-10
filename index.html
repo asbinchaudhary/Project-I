@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthLens - Deepfake Detection</title>
+    <style>
+        /* Base Styles & Typography */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+        :root {
+            --bg-color: #0b0c10;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --box-bg: #15161a;
+            --border-color: #2a2a2a;
+            --accent: #5e6ad2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        nav {
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a.active, .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-top: 60px;
+            max-width: 800px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hackathon-badge {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            background: rgba(94, 106, 210, 0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        /* Tech Tags */
+        .tech-tags {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .tech-tag {
+            background: var(--box-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Upload Zone */
+        .upload-container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--box-bg);
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 60px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-container:hover {
+            border-color: #555;
+            background: #1a1b22;
+        }
+
+        /* Lively Drag-and-Drop Active State */
+        .upload-container.dragover {
+            border-color: var(--accent);
+            background: rgba(94, 106, 210, 0.05);
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(94, 106, 210, 0.2);
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .upload-container h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .upload-container p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .media-types {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .media-type {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Hidden File Input */
+        #file-input {
+            display: none;
+        }
+
+        /* Processing State Styling */
+        .processing {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">🛡️ TruthLens <span style="font-size: 0.7rem; color: var(--text-muted); background: #222; padding: 2px 6px; border-radius: 4px;">v1.0</span></div>
+        <div class="nav-links">
+            <a href="#" class="active">Detect</a>
+            <a href="#">Community Feed</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="hackathon-badge">● HACKVERSE HACKATHON 2026</div>
+        
+        <h1>Detect deepfakes <br> with one upload.</h1>
+        <p class="subtitle">AI-powered deepfake detection for images, video, and audio <br> — with explainability via GradCAM heatmaps.</p>
+        
+        <div class="tech-tags">
+            <div class="tech-tag">❖ EfficientNet-B4 - GradCAM</div>
+            <div class="tech-tag">❖ Image • Video • Audio</div>
+            <div class="tech-tag">❖ Real-time • &lt; 10s</div>
+        </div>
+
+        <div class="upload-container" id="drop-zone">
+            <div id="initial-state">
+                <span class="upload-icon">↑</span>
+                <h3>Drop media here</h3>
+                <p>or click to browse files</p>
+                <div class="media-types">
+                    <span class="media-type" style="color: #a78bfa;">📷 IMAGE</span>
+                    <span class="media-type" style="color: #60a5fa;">🎥 VIDEO</span>
+                    <span class="media-type" style="color: #34d399;">🎵 AUDIO</span>
+                </div>
+            </div>
+
+            <div class="processing" id="processing-state">
+                <div class="spinner"></div>
+                <h3>Analyzing Media...</h3>
+                <p id="file-name-display" style="color: var(--accent);">filename.mp4</p>
+            </div>
+            
+            <input type="file" id="file-input" accept="image/*,video/*,audio/*">
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const initialState = document.getElementById('initial-state');
+        const processingState = document.getElementById('processing-state');
+        const fileNameDisplay = document.getElementById('file-name-display');
+
+        // 1. Click to trigger file input
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // 2. Handle Drag and Drop visual states
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Add glow effect when dragging over
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.add('dragover');
+            }, false);
+        });
+
+        // Remove glow effect when dragging leaves
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.remove('dragover');
+            }, false);
+        });
+
+        // 3. Handle dropped files
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }, false);
+
+        // 4. Handle files selected via click
+        fileInput.addEventListener('change', function() {
+            handleFiles(this.files);
+        });
+
+        // 5. Function to simulate the upload & processing
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                
+                // Switch UI to processing state
+                initialState.style.display = 'none';
+                processingState.style.display = 'flex';
+                fileNameDisplay.textContent = file.name;
+                
+                // Simulate network/AI processing delay (3 seconds)
+                setTimeout(() => {
+                    alert(`Analysis complete for ${file.name}. \n\n(This is where you would transition to the results page showing the GradCAM heatmaps!)`);
+                    
+                    // Reset UI
+                    initialState.style.display = 'block';
+                    processingState.style.display = 'none';
+                    fileInput.value = ''; // clear input
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>
